@@ -2,19 +2,6 @@
 
 # This file disassembles two project files
 
-def file_to_array(file):
-    return_array = []
-
-    for line in file:
-
-        line = line.partition('#')[0]
-
-        line = line.rstrip()
-
-        if line[0:1] == '1' or line[0:1] == '0':
-            return_array.append(line)
-
-    return return_array
 
 
 def execute_operation(line, data_mem, registerArray, pc, b):
@@ -41,10 +28,10 @@ def execute_operation(line, data_mem, registerArray, pc, b):
             d = "4"
         a = "ADD"
         print(registerArray)
-        registerArray[c] = registerArray[c] + registerArray[d]
+        registerArray[int (c)] = registerArray[ int (c)] + registerArray[int (d)]
         pc += 1
 
-    if line[0:3] == '011':  # sub instruction
+    elif line[0:3] == '011':  # sub instruction
         op = line[0:3]
         rx = line[3:5]
         ry = line[5:7]
@@ -57,7 +44,7 @@ def execute_operation(line, data_mem, registerArray, pc, b):
         registerArray[c] = registerArray[c] - registerArray[d]
         pc += 1
 
-    if line[0:3] == '000':  # b instruction
+    elif line[0:3] == '000':  # b instruction
         op = line[0:3]
         imm = line[3:7]
         parity = line[7:8]
@@ -96,11 +83,11 @@ def execute_operation(line, data_mem, registerArray, pc, b):
 
         a = "B"
         if b == 1:
-            pc += imm
+            pc += int(imm)
         else:
             pc += 1
 
-    if line[0:3] == '010':  # ADDI instruction
+    elif line[0:3] == '010':  # ADDI instruction
         op = line[0:3]
         rx = line[3:5]
         imm = line[5:7]
@@ -125,7 +112,7 @@ def execute_operation(line, data_mem, registerArray, pc, b):
         registerArray[int(c)] += int(d)
         pc += 1
 
-    if line[0:3] == '100':  # SLT instruction
+    elif line[0:3] == '100':  # SLT instruction
         op = line[0:3]
         rx = line[3:5]
         ry = line[5:7]
@@ -137,12 +124,13 @@ def execute_operation(line, data_mem, registerArray, pc, b):
         rx = registerArray[c]
         ry = registerArray[d]
         if c < d:
-            b = 1
+            registerArray[6] = 1
         else:
-            b = 0
+            registerArray[6] = 0
+
         pc += 1
 
-    if line[0:3] == '101':  # XOR instruction
+    elif line[0:3] == '101':  # XOR instruction
         op = line[0:3]
         rx = line[3:5]
         ry = line[5:7]
@@ -154,7 +142,7 @@ def execute_operation(line, data_mem, registerArray, pc, b):
         xor_value = (registerArray[c] ^ registerArray[d])
         pc += 1
 
-    if line[0:3] == '110':  # AND instruction
+    elif line[0:3] == '110':  # AND instruction
         op = line[0:3]
         rx = line[3:5]
         ry = line[5:7]
@@ -166,7 +154,7 @@ def execute_operation(line, data_mem, registerArray, pc, b):
         and_value = (registerArray[c] and registerArray[d])
         pc += 1
 
-    if line[0:5] == '11110':  # Store instruction
+    elif line[0:5] == '11110':  # Store instruction
         op = line[0:5]
         rx = line[5:6]
         rp = line[6:7]
@@ -184,7 +172,7 @@ def execute_operation(line, data_mem, registerArray, pc, b):
         data_mem[registerArray[int(p)]] = registerArray[int(c)]
         pc += 1
 
-    if line[0:5] == '11111':  # Load instruction
+    elif line[0:5] == '11111':  # Load instruction
         op = line[0:5]
         rx = line[5:6]
         imm = line[6:7]
@@ -198,10 +186,10 @@ def execute_operation(line, data_mem, registerArray, pc, b):
         else:
             p = "6"
         a = "LOAD"
-        registerArray[int(c)] = data_mem[int(p)]
+        registerArray[int(c)] = int(data_mem[int(p)])
         pc += 1
 
-    if line[0:5] == '11100':  # ADDPTR instruction
+    elif line[0:5] == '11100':  # ADDPTR instruction
         op = line[0:5]
         rp = line[5:6]
         p = line[6:7]
@@ -216,8 +204,9 @@ def execute_operation(line, data_mem, registerArray, pc, b):
             p = "1"
         a = "ADDPTR"
         registerArray[int(c)] += registerArray[int(p)]
+        pc += 1
 
-    if line[0:5] == '11101':  # RESETPTR instruction
+    elif line[0:5] == '11101':  # RESETPTR instruction
         op = line[0:5]
         rp = line[5:6]
         p = line[6:7]
@@ -231,25 +220,36 @@ def execute_operation(line, data_mem, registerArray, pc, b):
         else:
             p = ""
         a = "RESETPTR"
-        registerArray[int(c)] = data_mem[0]
+        registerArray[int(c)] = int(data_mem[0])
+        pc +=1
 
+    return [data_mem, registerArray, pc, b]
 
-def simulator(progFile, instructionFile, dataFile):
+def simulator(instructionFile, dataFile):
     pc = 0
     b = 0
-    registerArray = [0, 0, 0, 0]
+    registerArray = [0, 0, 0, 0, 0, 0, 0]
+    instr_mem = []
+    data_mem= []
 
-    print(progFile)
 
     # Create file variables from file name strings
 
-    instr_mem_input = open(instructionFile, "r")
+    instr_mem_input = (instructionFile)
 
-    data_mem_input = open(dataFile, "r")
+    data_mem_input = (dataFile)
+    for line in instr_mem_input:
+        line = line.rstrip()
 
-    instr_mem = file_to_array(instr_mem_input)
+        if line[0:1] == '1' or line[0:1] == '0':
+           instr_mem.append(line)
+    for line in data_mem_input:
+        line = line.rstrip()
 
-    data_mem = file_to_array(data_mem_input)
+        if line[0:1] == '1' or line[0:1] == '0':
+            data_mem.append(line)
+
+    dic = 0
 
     while pc < len(instr_mem):
         # data_set is of the following format:
@@ -266,41 +266,26 @@ def simulator(progFile, instructionFile, dataFile):
 
         registerArray = data_set[1]
 
-        pc = data_set[3]
+        pc = data_set[2]
 
-        b = data_set[4]
+        b = data_set[3]
 
         print("registerArray: ", registerArray)
 
-        print("MEM[4]: Highest Score ", data_mem[4])
-
-        print("MEM[5]: Count         ", data_mem[5])
 
         print("\n")
 
         dic += 1
 
-        # time.sleep(.001)
 
     print("Dynamic Instruction Count: ", dic)
 
-    # print(instr_mem)
-
-    # print(data_mem)
 
 
-# simulator("Program 0 : Simulator Testing",
-
-#          "p3_group_10_p0_imem.txt",
-
-#          "p3_group_10_dmem_A.txt")
 
 
-# simulator("Program 1 : Modular Exponentiation",
 
-#            "p3_group_10_p1_imem.txt",
+Program2_Bin = open("Program2_Bin.txt", "r")
+PatternA = open("PatternA.txt", "r")
+simulator(Program2_Bin, PatternA)
 
-#            "p3_group_10_dmem_B.txt")
-
-
-simulator("Program 2 : Best Matching Count", "Program2_Bin.txt", "patternA.txt")
