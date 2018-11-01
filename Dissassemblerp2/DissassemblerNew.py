@@ -213,6 +213,67 @@ def convert_bin_to_asm(input_file, output_file):
 
 
 
+def simulator(program_name, instr_mem_file, data_mem_file):
+
+    # Initialize pc and register array
+
+    pc = 0
+
+    branch = 0
+
+    reg_arr = [0, 0, 0, 0]
+
+    special_reg_arr = [0, 0, 0, 0]
+
+
+
+    print(program_name)
+
+
+
+    # Create file variables from file name strings
+
+    instr_mem_input = open(instr_mem_file, "r")
+
+    data_mem_input = open(data_mem_file, "r")
+
+
+
+    instr_mem = file_to_array(instr_mem_input)
+
+    data_mem = file_to_array(data_mem_input)
+
+    print(len(instr_mem))
+
+    while pc < len(instr_mem):
+
+        # data_set is of the following format:
+
+        # [data_mem, reg_arr, special_reg_arr, pc, branch]
+
+        opcode = instr_mem[pc]
+
+        print("PC: ", pc)
+
+        data_set = execute_operation(opcode, data_mem, reg_arr, special_reg_arr, pc, branch)
+
+        data_mem = data_set[0]
+
+        reg_arr = data_set[1]
+
+        special_reg_arr = data_set[2]
+
+        pc = data_set[3]
+
+        branch = data_set[4]
+
+        print("reg_arr: " ,reg_arr)
+
+        print("Data_mem[2]: ", data_mem[2])
+
+        print("special_Reg_arr: ", special_reg_arr)
+
+        print("\n")
 
 convert_bin_to_asm(p1_input_file, p1_output_file)
 convert_bin_to_asm(p2_input_file, p2_output_file)
