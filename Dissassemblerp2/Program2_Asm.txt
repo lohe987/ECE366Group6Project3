@@ -1,0 +1,111 @@
+ADDI $2, 1
+ADDI $1, 1
+ADDI $2, 1
+ADD $2, $2
+ADD $2, $2
+ADD $2, $2
+ADD $2, $2
+ADD $3, $2
+ADD $3, $3
+ADD $3, $2
+ADDI $3, 1
+ADDI $3, 1
+ADD $3, $3
+RESETPTR $6 
+STORE $2, [$5]
+ADDPTR $5, #1
+STORE $3, [$5]
+ADDPTR $6, #1
+ADDPTR $6, #1
+ADDPTR $6, #1
+ADDPTR $6, #1
+ADDPTR $6, #1
+ADDPTR $6, #1
+ADDPTR $6, #1
+ADDPTR $6, #1
+SLT $0, $2
+B #7
+RESETPTR $6 
+ADDPTR $5, #1
+ADDPTR $5, #1
+ADDPTR $5, #1
+ADDPTR $5, #1
+SLT $0, $0
+B #7
+B #-7
+ADDPTR $5, #1
+ADDI $2, 0
+ADDI $2, 1
+STORE $2, [$5]
+RESETPTR $6 
+LOAD $2, [$5]
+ADDPTR $5, #1
+SLT $0, $0
+B #7
+B #-6
+B #-6
+ADDPTR $5, #1
+LOAD $3, [$5]
+SUB $2, $3
+SLT $0, $0
+B #3
+B #-7
+B #-7
+B #7
+ADDPTR $5, #1
+ADDPTR $5, #1
+LOAD $3, [$5]
+SLT $3, $2
+B #-7
+B #-7
+B #5
+SUB $2, $3
+SLT $2, $0
+B #7
+B #-5
+B #7
+ADDPTR $5, #1
+LOAD $2, [$5]
+ADDI $2, 1
+STORE $2, [$5]
+SLT $0, $0
+B #-7
+RESETPTR $6 
+LOAD $3, [$5]
+ADD $4, $3
+ADDPTR $5, #1
+SLT $0, $0
+B #-6
+B #-6
+LOAD $3, [$5]
+ADDI $3, -1
+STORE $3, [$5]
+ADDPTR $5, #1
+ADDI $2, 0
+SLT $0, $0
+B #-8
+B #-8
+STORE $2, [$5]
+ADDI $1, 1
+ADDI $4, -1
+SLT $3, $0
+B #-6
+LOAD $2, [$5]
+SLT $0, $0
+B #-8
+LOAD $3, [$6]
+XOR $3, $2
+AND $3, $1
+SLT $0, $3
+B #4
+ADDI $1, 1
+SLT $0, $2
+B #-8
+ADD $1, $1
+ADDPTR $5, #-1
+LOAD $3, [$5]
+ADDI $3, 1
+STORE $3, [$5]
+ADDPTR $5, #1
+SLT $0, $2
+B #-8
