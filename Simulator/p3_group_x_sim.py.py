@@ -281,7 +281,7 @@ def simulator(instructionFile, dataFile):
 
 
 
-Program2_Bin = open("Program2_Bin.txt", "r")
+Program2_Bin = open("p0.txt", "r")
 PatternA = open("PatternA.txt", "r")
 simulator(Program2_Bin, PatternA)
 
