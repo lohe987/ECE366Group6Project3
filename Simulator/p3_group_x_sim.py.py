@@ -279,9 +279,13 @@ def simulator(instructionFile, dataFile):
 
 
 
+Program1_Bin = open("Program1_Bin.txt", "r")
+Program2_Bin = open("Program2_Bin.txt", "r")
+Program0_Bin = open("p3_group_x_p0_imem.txt", "r")
+i = input("enter which file to run:")
+if(i == 1)
 
 
-Program2_Bin = open("p0.txt", "r")
 PatternA = open("PatternA.txt", "r")
 simulator(Program2_Bin, PatternA)
 
